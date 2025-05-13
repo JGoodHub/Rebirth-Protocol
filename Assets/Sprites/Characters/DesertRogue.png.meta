@@ -1297,7 +1297,55 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      DesertRogue_0: 8206707352224598685
+      DesertRogue_1: 2617937473978081122
+      DesertRogue_10: 8508573238076274863
+      DesertRogue_11: 8156101571153404680
+      DesertRogue_12: -2030395203447717865
+      DesertRogue_13: 119006936379869481
+      DesertRogue_14: 463151815498528344
+      DesertRogue_15: 3511965283427038520
+      DesertRogue_16: 8077920733151083927
+      DesertRogue_17: -4996563866687089805
+      DesertRogue_18: -1836521001059749796
+      DesertRogue_19: -2666849438467460610
+      DesertRogue_2: -4873139682315923997
+      DesertRogue_20: 6072625567677673350
+      DesertRogue_21: 2258455731752598549
+      DesertRogue_22: -8869535462054716748
+      DesertRogue_23: -3218353682747023047
+      DesertRogue_24: 2390898676207405707
+      DesertRogue_25: 5835168383032974160
+      DesertRogue_26: -1748599329436182056
+      DesertRogue_27: 7508766434767610898
+      DesertRogue_28: 2547934256101073106
+      DesertRogue_29: 5767594299507087161
+      DesertRogue_3: -4997339715390294350
+      DesertRogue_30: -6615898487394182535
+      DesertRogue_31: -4411062175053144710
+      DesertRogue_32: -3947217371180018877
+      DesertRogue_33: 6423102478068877483
+      DesertRogue_34: 6570130425734999458
+      DesertRogue_35: -596104608965299430
+      DesertRogue_36: -5737110994580174471
+      DesertRogue_37: -5427689224904744019
+      DesertRogue_38: 8833711071155843513
+      DesertRogue_39: 6373673402030359861
+      DesertRogue_4: 7702372916082777256
+      DesertRogue_40: 2331836199327976518
+      DesertRogue_41: -5209158282408130723
+      DesertRogue_42: -3857617097414957280
+      DesertRogue_43: 4988382730169735257
+      DesertRogue_44: -6283968219648988192
+      DesertRogue_45: -2448515776163540263
+      DesertRogue_46: 4878799303522179602
+      DesertRogue_47: 967328289097088972
+      DesertRogue_5: -4914314531066450542
+      DesertRogue_6: -5378214839722410708
+      DesertRogue_7: -4800851534446189908
+      DesertRogue_8: 4226051157888539323
+      DesertRogue_9: -5871227413796264177
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
