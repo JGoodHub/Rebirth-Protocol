@@ -3,23 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorldGenerator : MonoBehaviour
+public class WorldGenerator : SceneSingleton<WorldGenerator>
 {
-    [SerializeField] private Vector2Int _mapSize = new Vector2Int(100, 60);
-    [SerializeField] private Transform _terrainParent;
-    [SerializeField] private GameObject _terrainPrefab;
-    
-    [SerializeField] private Transform _sceneryParent;
+    [SerializeField]
+    private Vector2Int _mapSize = new Vector2Int(100, 60);
+
+    [SerializeField]
+    private Transform _terrainParent;
+
+    [SerializeField]
+    private GameObject _terrainPrefab;
+
+    [SerializeField]
+    private Transform _sceneryParent;
 
     private TerrainCell[,] _terrainCells;
 
-    private void Awake()
+    public Vector2Int MapSize => _mapSize;
+
+    public void Initialise()
     {
         _terrainCells = GenerateWorldData(_mapSize);
-    }
-
-    private void Start()
-    {
         InstantiateWorldData(_terrainCells);
     }
 
@@ -46,7 +50,8 @@ public class WorldGenerator : MonoBehaviour
     {
         foreach (TerrainCell terrainCell in terrainCells)
         {
-            Instantiate(_terrainPrefab, new Vector3(terrainCell.Coords.x, terrainCell.Coords.y), Quaternion.identity, _terrainParent);
+            Instantiate(_terrainPrefab, new Vector3(terrainCell.Coords.x, terrainCell.Coords.y), Quaternion.identity,
+                _terrainParent);
         }
     }
 }

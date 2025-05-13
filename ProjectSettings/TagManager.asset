@@ -41,3 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Terrain
+    uniqueID: 3537734955
+    locked: 0
+  - name: Decorations
+    uniqueID: 4096309821
+    locked: 0
