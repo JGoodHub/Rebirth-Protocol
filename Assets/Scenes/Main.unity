@@ -3105,7 +3105,7 @@ Transform:
   m_GameObject: {fileID: 335472325}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 0, z: 0}
+  m_LocalPosition: {x: 10, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5120,7 +5120,7 @@ Transform:
   m_GameObject: {fileID: 539163613}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 100, y: 17, z: 0}
+  m_LocalPosition: {x: 104, y: 17, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6949,7 +6949,7 @@ Transform:
   m_GameObject: {fileID: 757844630}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 66, y: 0, z: 0}
+  m_LocalPosition: {x: 66, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9795,7 +9795,7 @@ Transform:
   m_GameObject: {fileID: 1022841194}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 51, z: 0}
+  m_LocalPosition: {x: -3, y: 51, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13059,8 +13059,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lockToBounds: 1
   _cameraBoundary:
-    m_Center: {x: 50, y: 30, z: 0}
-    m_Extent: {x: 35, y: 21, z: 0}
+    m_Center: {x: 50.5, y: 30.5, z: 0}
+    m_Extent: {x: 35.7, y: 21.9, z: 0}
   DragEnabled: 1
 --- !u!4 &1315846261
 Transform:
@@ -13222,7 +13222,7 @@ Transform:
   m_GameObject: {fileID: 1326467255}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 100, y: 5, z: 0}
+  m_LocalPosition: {x: 103, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -15575,7 +15575,7 @@ Transform:
   m_GameObject: {fileID: 1594510390}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 90, y: 60, z: 0}
+  m_LocalPosition: {x: 90, y: 63, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18296,7 +18296,7 @@ Transform:
   m_GameObject: {fileID: 1772832919}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20, y: 0, z: 0}
+  m_LocalPosition: {x: 20, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18843,7 +18843,7 @@ Transform:
   m_GameObject: {fileID: 1810454547}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 74, y: 60, z: 0}
+  m_LocalPosition: {x: 74, y: 63, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18964,7 +18964,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbe1dfeb43e0411498734199c4ea152d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapSize: {x: 100, y: 60}
+  _mapSize: {x: 102, y: 62}
   _terrainParent: {fileID: 562734678}
   _terrainPrefab: {fileID: 4922280777756557943, guid: 9b36b9aba5f50294eb6b3b590aa7e3d4, type: 3}
   _sceneryParent: {fileID: 0}
@@ -20308,45 +20308,55 @@ MonoBehaviour:
     end: {fileID: 1810454548}
     controlPoint1Offset: {x: -59.3, y: 13.06}
     controlPoint2Offset: {x: 42.8, y: -26.7}
-  - start: {fileID: 539163614}
-    end: {fileID: 335472326}
-    controlPoint1Offset: {x: -39.17, y: 44.2}
-    controlPoint2Offset: {x: 6.36, y: 59.4}
   - start: {fileID: 1022841195}
     end: {fileID: 757844631}
     controlPoint1Offset: {x: 49.1, y: -18.2}
-    controlPoint2Offset: {x: -67.9, y: 14.9}
+    controlPoint2Offset: {x: -67.9, y: 12.8}
+  - start: {fileID: 539163614}
+    end: {fileID: 335472326}
+    controlPoint1Offset: {x: -27.8, y: -10.1}
+    controlPoint2Offset: {x: 27.47, y: 117.2}
   - start: {fileID: 1594510391}
     end: {fileID: 1772832920}
     controlPoint1Offset: {x: 29.4, y: -67.6}
     controlPoint2Offset: {x: 24.4, y: 29.2}
   _riverTilePairs:
-  - AdjacencyKey: 
-    Sprite: {fileID: 677527158, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - AdjacencyKey: TopBank_Straight
-    Sprite: {fileID: 405690388, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - AdjacencyKey: 
-    Sprite: {fileID: 1096622706, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - AdjacencyKey: LeftBank_Straight
-    Sprite: {fileID: -1186625619, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - AdjacencyKey: 
-    Sprite: {fileID: 898759657, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - AdjacencyKey: RightBank_Straight
-    Sprite: {fileID: 1186381745, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - AdjacencyKey: 
-    Sprite: {fileID: 1537960010, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - AdjacencyKey: BottomBank_Straight
-    Sprite: {fileID: 1609316056, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - AdjacencyKey: 
-    Sprite: {fileID: -240302047, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - AdjacencyKey: 
-    Sprite: {fileID: 2107532083, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - AdjacencyKey: 
-    Sprite: {fileID: 1871098088, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - AdjacencyKey: 
-    Sprite: {fileID: 1910255090, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - AdjacencyKey: 
-    Sprite: {fileID: 1769582590, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
+  - Sprite: {fileID: 677527158, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
+    WalkableConditions: 00000000020000000400000006000000
+    BlockedConditions: 03000000
+  - Sprite: {fileID: 405690388, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
+    WalkableConditions: 000000000200000006000000
+    BlockedConditions: 04000000
+  - Sprite: {fileID: 1096622706, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
+    WalkableConditions: 00000000020000000400000006000000
+    BlockedConditions: 05000000
+  - Sprite: {fileID: -1186625619, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
+    WalkableConditions: 000000000400000006000000
+    BlockedConditions: 02000000
+  - Sprite: {fileID: 1186381745, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
+    WalkableConditions: 000000000200000004000000
+    BlockedConditions: 06000000
+  - Sprite: {fileID: 1537960010, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
+    WalkableConditions: 00000000020000000400000006000000
+    BlockedConditions: 01000000
+  - Sprite: {fileID: 1609316056, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
+    WalkableConditions: 020000000400000006000000
+    BlockedConditions: 00000000
+  - Sprite: {fileID: -240302047, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
+    WalkableConditions: 00000000020000000400000006000000
+    BlockedConditions: 07000000
+  - Sprite: {fileID: 2107532083, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
+    WalkableConditions: 0000000006000000
+    BlockedConditions: 0200000004000000
+  - Sprite: {fileID: 1871098088, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
+    WalkableConditions: 0000000002000000
+    BlockedConditions: 0400000006000000
+  - Sprite: {fileID: 1910255090, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
+    WalkableConditions: 0400000006000000
+    BlockedConditions: 0000000002000000
+  - Sprite: {fileID: 1769582590, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
+    WalkableConditions: 0200000004000000
+    BlockedConditions: 0000000006000000
   _riverTilePrefab: {fileID: 1427484973893664626, guid: 3ae061493857e46ea83ab7ceb8cc65ac, type: 3}
   _riverTilesParent: {fileID: 2139761250}
 --- !u!4 &1953512208

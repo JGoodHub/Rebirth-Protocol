@@ -82,9 +82,9 @@ public class ObstaclesController : SceneSingleton<ObstaclesController>
         return false;
     }
 
-    public string GetFourPointIsWalkableSample(Vector2Int sampleCenter)
+    public byte GetFourPointIsWalkableSample(Vector2Int sampleCenter)
     {
-        StringBuilder walkableSampleOutput = new StringBuilder(4);
+        byte walkableSampleOutput = 0;
 
         Vector2Int[] sampleCoords =
         {
@@ -94,13 +94,72 @@ public class ObstaclesController : SceneSingleton<ObstaclesController>
             new Vector2Int(sampleCenter.x - 1, sampleCenter.y),
         };
 
-        foreach (Vector2Int sampleCoord in sampleCoords)
+        for (int i = 0; i < sampleCoords.Length; i++)
         {
-            Vector2Int offsetSamplePoint = new Vector2Int(sampleCoord.x, sampleCoord.y);
-            walkableSampleOutput.Append(IsAreaWalkable(offsetSamplePoint) ? 1 : 0);
+            Vector2Int offsetSamplePoint = sampleCoords[i];
+            if (IsAreaWalkable(offsetSamplePoint))
+            {
+                walkableSampleOutput |= (byte)(1 << 3 - i);
+            }
         }
 
-        return walkableSampleOutput.ToString();
+        return walkableSampleOutput;
+    }
+
+    public byte GetEightPointIsWalkableSample(Vector2Int sampleCenter)
+    {
+        byte walkableSampleOutput = 0;
+
+        Vector2Int[] sampleCoords =
+        {
+            new Vector2Int(sampleCenter.x, sampleCenter.y + 1),
+            new Vector2Int(sampleCenter.x + 1, sampleCenter.y + 1),
+            new Vector2Int(sampleCenter.x + 1, sampleCenter.y),
+            new Vector2Int(sampleCenter.x + 1, sampleCenter.y - 1),
+            new Vector2Int(sampleCenter.x, sampleCenter.y - 1),
+            new Vector2Int(sampleCenter.x - 1, sampleCenter.y - 1),
+            new Vector2Int(sampleCenter.x - 1, sampleCenter.y),
+            new Vector2Int(sampleCenter.x - 1, sampleCenter.y + 1),
+        };
+
+        for (int i = 0; i < sampleCoords.Length; i++)
+        {
+            Vector2Int offsetSamplePoint = sampleCoords[i];
+            if (IsAreaWalkable(offsetSamplePoint))
+            {
+                walkableSampleOutput |= (byte)(1 << 7 - i);
+            }
+        }
+
+        return walkableSampleOutput;
+    }
+
+    public List<Direction> GetEightPointWalkableDirections(Vector2Int sampleCenter)
+    {
+        List<Direction> walkableDirections = new List<Direction>();
+
+        Vector2Int[] sampleCoords =
+        {
+            new Vector2Int(sampleCenter.x, sampleCenter.y + 1),
+            new Vector2Int(sampleCenter.x + 1, sampleCenter.y + 1),
+            new Vector2Int(sampleCenter.x + 1, sampleCenter.y),
+            new Vector2Int(sampleCenter.x + 1, sampleCenter.y - 1),
+            new Vector2Int(sampleCenter.x, sampleCenter.y - 1),
+            new Vector2Int(sampleCenter.x - 1, sampleCenter.y - 1),
+            new Vector2Int(sampleCenter.x - 1, sampleCenter.y),
+            new Vector2Int(sampleCenter.x - 1, sampleCenter.y + 1),
+        };
+
+        for (int i = 0; i < sampleCoords.Length; i++)
+        {
+            Vector2Int offsetSamplePoint = sampleCoords[i];
+            if (IsAreaWalkable(offsetSamplePoint))
+            {
+                walkableDirections.Add((Direction)i);
+            }
+        }
+
+        return walkableDirections;
     }
 
     private void OnDrawGizmosSelected()

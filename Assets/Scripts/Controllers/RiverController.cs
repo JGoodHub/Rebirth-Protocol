@@ -5,21 +5,20 @@ using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+public enum Direction
+{
+    Up,
+    UpRight,
+    Right,
+    DownRight,
+    Down,
+    DownLeft,
+    Left,
+    UpLeft,
+}
+
 public class RiverController : SceneSingleton<RiverController>
 {
-    // public enum RiverTileType
-    // {
-    //     TopLeft,
-    //     TopMiddle,
-    //     TopRight,
-    //     MiddleLeft,
-    //     Center,
-    //     MiddleRight,
-    //     BottomLeft,
-    //     BottomMiddle,
-    //     BottomRight,
-    // }
-
     [Serializable]
     public class RiverCurve
     {
@@ -37,8 +36,9 @@ public class RiverController : SceneSingleton<RiverController>
     [Serializable]
     public class RiverTilePair
     {
-        public string AdjacencyKey;
         public Sprite Sprite;
+        public List<Direction> WalkableConditions = new List<Direction>();
+        public List<Direction> BlockedConditions = new List<Direction>();
     }
 
     [SerializeField]
@@ -55,18 +55,8 @@ public class RiverController : SceneSingleton<RiverController>
 
     public void Initialise()
     {
-        RiverCurve riverA = _riverCurves[Random.Range(0, _riverCurves.Count)];
-        RiverCurve riverB = _riverCurves[Random.Range(0, _riverCurves.Count)];
-
-        while (riverB == riverA)
-        {
-            riverB = _riverCurves[Random.Range(0, _riverCurves.Count)];
-        }
-
-        riverA = _riverCurves[1];
-
-        SetupRiver(riverA);
-        //SetupRiver(riverB);
+        RiverCurve river = _riverCurves[Random.Range(0, _riverCurves.Count)];
+        SetupRiver(river);
     }
 
     private void SetupRiver(RiverCurve riverCurve)
@@ -78,9 +68,9 @@ public class RiverController : SceneSingleton<RiverController>
         {
             if (ObstaclesController.Singleton.IsWithinMapBounds(riverBedPoint) == false)
                 continue;
-            
+
             Instantiate(_riverTilePrefab, new Vector3(riverBedPoint.x, riverBedPoint.y), Quaternion.identity,
-                _riverTilesParent).GetComponent<SpriteRenderer>().sprite = _riverTilePairs[4].Sprite;
+                _riverTilesParent);
 
             ObstaclesController.Singleton.RegisterObstacle(riverBedPoint);
 
@@ -90,9 +80,6 @@ public class RiverController : SceneSingleton<RiverController>
                 {
                     Vector2Int effectedPoint = new Vector2Int(riverBedPoint.x + xOff, riverBedPoint.y + yOff);
 
-                    if (ObstaclesController.Singleton.IsWithinMapBounds(effectedPoint) == false)
-                        continue;
-
                     if (riverBedPoints.Contains(effectedPoint) || effectedRiverPoints.Contains(effectedPoint))
                         continue;
 
@@ -101,42 +88,21 @@ public class RiverController : SceneSingleton<RiverController>
             }
         }
 
-        Debug.Log(ObstaclesController.Singleton.GetFourPointIsWalkableSample(new Vector2Int(37, 47)));
-
-        // Sort the straight banks first as their the easiest
+        // Sort the straight banks first as they're the easiest
         foreach (Vector2Int effectedRiverPoint in effectedRiverPoints)
         {
-            string sample = ObstaclesController.Singleton.GetFourPointIsWalkableSample(effectedRiverPoint);
+            List<Direction> eightPointWalkableDirections =
+                ObstaclesController.Singleton.GetEightPointWalkableDirections(effectedRiverPoint);
 
-            if (sample == "1101")
+            RiverTilePair riverTilePair =
+                _riverTilePairs.Find(pair =>
+                    DoListsValuesMatch(pair.WalkableConditions, pair.BlockedConditions, eightPointWalkableDirections));
+
+            if (riverTilePair != null)
             {
                 Vector3 position = new Vector3(effectedRiverPoint.x, effectedRiverPoint.y);
-                Sprite sprite = _riverTilePairs.Find(item => item.AdjacencyKey == "TopBank_Straight").Sprite;
                 GameObject tile = Instantiate(_riverTilePrefab, position, Quaternion.identity, _riverTilesParent);
-                tile.GetComponent<SpriteRenderer>().sprite = sprite;
-            }
-
-            if (sample == "1110")
-            {
-                Vector3 position = new Vector3(effectedRiverPoint.x, effectedRiverPoint.y);
-                Sprite sprite = _riverTilePairs.Find(item => item.AdjacencyKey == "RightBank_Straight").Sprite;
-                GameObject tile = Instantiate(_riverTilePrefab, position, Quaternion.identity, _riverTilesParent);
-                tile.GetComponent<SpriteRenderer>().sprite = sprite;
-            }
-
-            if (sample == "0111")
-            {
-                Vector3 position = new Vector3(effectedRiverPoint.x, effectedRiverPoint.y);
-                Sprite sprite = _riverTilePairs.Find(item => item.AdjacencyKey == "BottomBank_Straight").Sprite;
-                GameObject tile = Instantiate(_riverTilePrefab, position, Quaternion.identity, _riverTilesParent);
-                tile.GetComponent<SpriteRenderer>().sprite = sprite;
-            }
-
-            if (sample == "1011")
-            {
-                Vector3 position = new Vector3(effectedRiverPoint.x, effectedRiverPoint.y);
-                Sprite sprite = _riverTilePairs.Find(item => item.AdjacencyKey == "LeftBank_Straight").Sprite;
-                GameObject tile = Instantiate(_riverTilePrefab, position, Quaternion.identity, _riverTilesParent);
+                Sprite sprite = riverTilePair.Sprite;
                 tile.GetComponent<SpriteRenderer>().sprite = sprite;
             }
         }
@@ -145,6 +111,26 @@ public class RiverController : SceneSingleton<RiverController>
         {
             ObstaclesController.Singleton.RegisterObstacle(effectedRiverPoint);
         }
+    }
+
+    private bool DoListsValuesMatch(List<Direction> walkableConditions, List<Direction> blockedConditions,
+        List<Direction> walkableDirections)
+    {
+        foreach (Direction walkableCondition in walkableConditions)
+        {
+            // Should be walkable but it's not
+            if (walkableDirections.Contains(walkableCondition) == false)
+                return false;
+        }
+
+        foreach (Direction blockedCondition in blockedConditions)
+        {
+            // Shouldn't be walkable but it is
+            if (walkableDirections.Contains(blockedCondition))
+                return false;
+        }
+
+        return true;
     }
 
     private List<Vector2Int> RasterizeRiverCurve(RiverCurve curve)
