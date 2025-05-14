@@ -1,23 +1,24 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class RiverController : SceneSingleton<RiverController>
 {
-    public enum RiverTileType
-    {
-        TopLeft,
-        TopMiddle,
-        TopRight,
-        MiddleLeft,
-        Center,
-        MiddleRight,
-        BottomLeft,
-        BottomMiddle,
-        BottomRight,
-    }
+    // public enum RiverTileType
+    // {
+    //     TopLeft,
+    //     TopMiddle,
+    //     TopRight,
+    //     MiddleLeft,
+    //     Center,
+    //     MiddleRight,
+    //     BottomLeft,
+    //     BottomMiddle,
+    //     BottomRight,
+    // }
 
     [Serializable]
     public class RiverCurve
@@ -36,7 +37,7 @@ public class RiverController : SceneSingleton<RiverController>
     [Serializable]
     public class RiverTilePair
     {
-        public RiverTileType Type;
+        public string AdjacencyKey;
         public Sprite Sprite;
     }
 
@@ -62,20 +63,87 @@ public class RiverController : SceneSingleton<RiverController>
             riverB = _riverCurves[Random.Range(0, _riverCurves.Count)];
         }
 
+        riverA = _riverCurves[1];
+
         SetupRiver(riverA);
-        SetupRiver(riverB);
+        //SetupRiver(riverB);
     }
 
     private void SetupRiver(RiverCurve riverCurve)
     {
-        List<Vector2Int> rasterizedRiverCurve = RasterizeRiverCurve(riverCurve);
+        List<Vector2Int> riverBedPoints = RasterizeRiverCurve(riverCurve);
+        List<Vector2Int> effectedRiverPoints = new List<Vector2Int>();
 
-        foreach (Vector2Int rasterizedPoint in rasterizedRiverCurve)
+        foreach (Vector2Int riverBedPoint in riverBedPoints)
         {
-            Instantiate(_riverTilePrefab, new Vector3(rasterizedPoint.x, rasterizedPoint.y), Quaternion.identity,
+            if (ObstaclesController.Singleton.IsWithinMapBounds(riverBedPoint) == false)
+                continue;
+            
+            Instantiate(_riverTilePrefab, new Vector3(riverBedPoint.x, riverBedPoint.y), Quaternion.identity,
                 _riverTilesParent).GetComponent<SpriteRenderer>().sprite = _riverTilePairs[4].Sprite;
 
-            ObstaclesController.Singleton.RegisterObstacle(rasterizedPoint);
+            ObstaclesController.Singleton.RegisterObstacle(riverBedPoint);
+
+            for (int yOff = -1; yOff <= 1; yOff++)
+            {
+                for (int xOff = -1; xOff <= 1; xOff++)
+                {
+                    Vector2Int effectedPoint = new Vector2Int(riverBedPoint.x + xOff, riverBedPoint.y + yOff);
+
+                    if (ObstaclesController.Singleton.IsWithinMapBounds(effectedPoint) == false)
+                        continue;
+
+                    if (riverBedPoints.Contains(effectedPoint) || effectedRiverPoints.Contains(effectedPoint))
+                        continue;
+
+                    effectedRiverPoints.Add(effectedPoint);
+                }
+            }
+        }
+
+        Debug.Log(ObstaclesController.Singleton.GetFourPointIsWalkableSample(new Vector2Int(37, 47)));
+
+        // Sort the straight banks first as their the easiest
+        foreach (Vector2Int effectedRiverPoint in effectedRiverPoints)
+        {
+            string sample = ObstaclesController.Singleton.GetFourPointIsWalkableSample(effectedRiverPoint);
+
+            if (sample == "1101")
+            {
+                Vector3 position = new Vector3(effectedRiverPoint.x, effectedRiverPoint.y);
+                Sprite sprite = _riverTilePairs.Find(item => item.AdjacencyKey == "TopBank_Straight").Sprite;
+                GameObject tile = Instantiate(_riverTilePrefab, position, Quaternion.identity, _riverTilesParent);
+                tile.GetComponent<SpriteRenderer>().sprite = sprite;
+            }
+
+            if (sample == "1110")
+            {
+                Vector3 position = new Vector3(effectedRiverPoint.x, effectedRiverPoint.y);
+                Sprite sprite = _riverTilePairs.Find(item => item.AdjacencyKey == "RightBank_Straight").Sprite;
+                GameObject tile = Instantiate(_riverTilePrefab, position, Quaternion.identity, _riverTilesParent);
+                tile.GetComponent<SpriteRenderer>().sprite = sprite;
+            }
+
+            if (sample == "0111")
+            {
+                Vector3 position = new Vector3(effectedRiverPoint.x, effectedRiverPoint.y);
+                Sprite sprite = _riverTilePairs.Find(item => item.AdjacencyKey == "BottomBank_Straight").Sprite;
+                GameObject tile = Instantiate(_riverTilePrefab, position, Quaternion.identity, _riverTilesParent);
+                tile.GetComponent<SpriteRenderer>().sprite = sprite;
+            }
+
+            if (sample == "1011")
+            {
+                Vector3 position = new Vector3(effectedRiverPoint.x, effectedRiverPoint.y);
+                Sprite sprite = _riverTilePairs.Find(item => item.AdjacencyKey == "LeftBank_Straight").Sprite;
+                GameObject tile = Instantiate(_riverTilePrefab, position, Quaternion.identity, _riverTilesParent);
+                tile.GetComponent<SpriteRenderer>().sprite = sprite;
+            }
+        }
+
+        foreach (Vector2Int effectedRiverPoint in effectedRiverPoints)
+        {
+            ObstaclesController.Singleton.RegisterObstacle(effectedRiverPoint);
         }
     }
 

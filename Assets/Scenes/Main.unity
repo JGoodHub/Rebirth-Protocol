@@ -16972,7 +16972,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1688973736
 Transform:
   m_ObjectHideFlags: 0
@@ -16982,7 +16982,7 @@ Transform:
   m_GameObject: {fileID: 1688973735}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -20, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -20321,24 +20321,32 @@ MonoBehaviour:
     controlPoint1Offset: {x: 29.4, y: -67.6}
     controlPoint2Offset: {x: 24.4, y: 29.2}
   _riverTilePairs:
-  - Type: 0
+  - AdjacencyKey: 
     Sprite: {fileID: 677527158, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - Type: 1
+  - AdjacencyKey: TopBank_Straight
     Sprite: {fileID: 405690388, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - Type: 2
+  - AdjacencyKey: 
     Sprite: {fileID: 1096622706, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - Type: 3
+  - AdjacencyKey: LeftBank_Straight
     Sprite: {fileID: -1186625619, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - Type: 4
+  - AdjacencyKey: 
     Sprite: {fileID: 898759657, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - Type: 5
+  - AdjacencyKey: RightBank_Straight
     Sprite: {fileID: 1186381745, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - Type: 6
+  - AdjacencyKey: 
     Sprite: {fileID: 1537960010, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - Type: 7
+  - AdjacencyKey: BottomBank_Straight
     Sprite: {fileID: 1609316056, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
-  - Type: 8
+  - AdjacencyKey: 
     Sprite: {fileID: -240302047, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
+  - AdjacencyKey: 
+    Sprite: {fileID: 2107532083, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
+  - AdjacencyKey: 
+    Sprite: {fileID: 1871098088, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
+  - AdjacencyKey: 
+    Sprite: {fileID: 1910255090, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
+  - AdjacencyKey: 
+    Sprite: {fileID: 1769582590, guid: 2bdadd1bdd49344519f13733c5697e8c, type: 3}
   _riverTilePrefab: {fileID: 1427484973893664626, guid: 3ae061493857e46ea83ab7ceb8cc65ac, type: 3}
   _riverTilesParent: {fileID: 2139761250}
 --- !u!4 &1953512208

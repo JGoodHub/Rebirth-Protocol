@@ -20,7 +20,7 @@ public class NomadController : SceneSingleton<NomadController>
         {
             Vector2Int walkableSpace = walkableSpaces[Random.Range(0, walkableSpaces.Count)];
 
-            if (ObstaclesController.Singleton.IsAreaFree(walkableSpace, Vector2Int.one * 3) == false)
+            if (ObstaclesController.Singleton.IsAreaWalkable(walkableSpace, Vector2Int.one * 3) == false)
                 continue;
 
             Instantiate(_tentPrefab, new Vector3(walkableSpace.x, walkableSpace.y), Quaternion.identity,

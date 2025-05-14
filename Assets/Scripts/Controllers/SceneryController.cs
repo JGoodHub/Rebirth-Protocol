@@ -33,7 +33,7 @@ public class SceneryController : SceneSingleton<SceneryController>
         {
             Vector2Int walkableSpace = walkableSpaces[Random.Range(0, walkableSpaces.Count)];
 
-            if (ObstaclesController.Singleton.IsAreaFree(walkableSpace) == false)
+            if (ObstaclesController.Singleton.IsAreaWalkable(walkableSpace) == false)
                 continue;
 
             Instantiate(_deadPlantPrefab, new Vector3(walkableSpace.x, walkableSpace.y), Quaternion.identity,
@@ -48,7 +48,7 @@ public class SceneryController : SceneSingleton<SceneryController>
         {
             Vector2Int walkableSpace = walkableSpaces[Random.Range(0, walkableSpaces.Count)];
 
-            if (ObstaclesController.Singleton.IsAreaFree(walkableSpace) == false)
+            if (ObstaclesController.Singleton.IsAreaWalkable(walkableSpace) == false)
                 continue;
 
             Instantiate(_cactusPrefab, new Vector3(walkableSpace.x, walkableSpace.y), Quaternion.identity,
@@ -63,7 +63,7 @@ public class SceneryController : SceneSingleton<SceneryController>
         {
             Vector2Int walkableSpace = walkableSpaces[Random.Range(0, walkableSpaces.Count)];
 
-            if (ObstaclesController.Singleton.IsAreaFree(walkableSpace, Vector2Int.one * 2) == false)
+            if (ObstaclesController.Singleton.IsAreaWalkable(walkableSpace, Vector2Int.one * 2) == false)
                 continue;
 
             Instantiate(_rockPrefabs[Random.Range(0, _rockPrefabs.Length)],

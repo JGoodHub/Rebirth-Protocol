@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 public class ObstaclesController : SceneSingleton<ObstaclesController>
@@ -22,7 +23,10 @@ public class ObstaclesController : SceneSingleton<ObstaclesController>
     {
         if (size == default)
         {
-            size = Vector2Int.one;
+            if (IsWithinMapBounds(coords, size))
+            {
+                _walkableMap[coords.x, coords.y] = false;
+            }
         }
 
         for (int y = 0; y < size.y; y++)
@@ -41,11 +45,11 @@ public class ObstaclesController : SceneSingleton<ObstaclesController>
         }
     }
 
-    public bool IsAreaFree(Vector2Int coords, Vector2Int size = default)
+    public bool IsAreaWalkable(Vector2Int coords, Vector2Int size = default)
     {
         if (size == default)
         {
-            size = Vector2Int.one;
+            return IsWithinMapBounds(coords, size) && _walkableMap[coords.x, coords.y];
         }
 
         for (int y = 0; y < size.y; y++)
@@ -65,6 +69,38 @@ public class ObstaclesController : SceneSingleton<ObstaclesController>
         }
 
         return true;
+    }
+
+    public bool IsWithinMapBounds(Vector2Int coords, Vector2Int size = default)
+    {
+        if (size == default)
+        {
+            return coords.x >= 0 && coords.x < _walkableMap.GetLength(0) &&
+                   coords.y >= 0 && coords.y < _walkableMap.GetLength(1);
+        }
+
+        return false;
+    }
+
+    public string GetFourPointIsWalkableSample(Vector2Int sampleCenter)
+    {
+        StringBuilder walkableSampleOutput = new StringBuilder(4);
+
+        Vector2Int[] sampleCoords =
+        {
+            new Vector2Int(sampleCenter.x, sampleCenter.y + 1),
+            new Vector2Int(sampleCenter.x + 1, sampleCenter.y),
+            new Vector2Int(sampleCenter.x, sampleCenter.y - 1),
+            new Vector2Int(sampleCenter.x - 1, sampleCenter.y),
+        };
+
+        foreach (Vector2Int sampleCoord in sampleCoords)
+        {
+            Vector2Int offsetSamplePoint = new Vector2Int(sampleCoord.x, sampleCoord.y);
+            walkableSampleOutput.Append(IsAreaWalkable(offsetSamplePoint) ? 1 : 0);
+        }
+
+        return walkableSampleOutput.ToString();
     }
 
     private void OnDrawGizmosSelected()
