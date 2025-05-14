@@ -54,6 +54,12 @@ public class WorldGenerator : SceneSingleton<WorldGenerator>
                 _terrainParent);
         }
     }
+    
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireCube(new Vector3(_mapSize.x, _mapSize.y) / 2, new Vector3(_mapSize.x, _mapSize.y));
+    }
 }
 
 public class TerrainCell

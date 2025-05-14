@@ -7,6 +7,7 @@ public class StartupController : MonoBehaviour
     {
         WorldGenerator.Singleton.Initialise();
         PlayerController.Singleton.Initialise();
+        RiverController.Singleton.Initialise();
         NomadController.Singleton.Initialise();
         SceneryController.Singleton.Initialise();
     }

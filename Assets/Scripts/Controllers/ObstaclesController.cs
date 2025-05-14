@@ -18,8 +18,13 @@ public class ObstaclesController : SceneSingleton<ObstaclesController>
         }
     }
 
-    public void RegisterObstacle(Vector2Int coords, Vector2Int size)
+    public void RegisterObstacle(Vector2Int coords, Vector2Int size = default)
     {
+        if (size == default)
+        {
+            size = Vector2Int.one;
+        }
+
         for (int y = 0; y < size.y; y++)
         {
             for (int x = 0; x < size.x; x++)
