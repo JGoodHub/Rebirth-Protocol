@@ -47,3 +47,6 @@ TagManager:
   - name: Decorations
     uniqueID: 4096309821
     locked: 0
+  - name: Characters
+    uniqueID: 658479205
+    locked: 0
