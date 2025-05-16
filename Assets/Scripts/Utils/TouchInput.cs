@@ -76,19 +76,19 @@ public class TouchInput : SceneSingleton<TouchInput>
         }
         else
         {
+            if (Input.GetMouseButtonUp(0))
+            {
+                TriggerTouchUp();
+
+                if (_frameTouchData.CurrentDragDistance < _pixelDistanceToDrag)
+                {
+                    TriggerTouchClick();
+                }
+            }
+
             if (_frameTouchData.IsDragging)
             {
                 TriggerTouchDragExit();
-            }
-        }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            TriggerTouchUp();
-
-            if (_frameTouchData.CurrentDragDistance < _pixelDistanceToDrag)
-            {
-                TriggerTouchClick();
             }
         }
     }
