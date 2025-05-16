@@ -9,6 +9,30 @@ public class Nomad : MonoBehaviour
 
     private bool _isIdle;
 
+    [SerializeField]
+    private float _energyMax;
+
+    [SerializeField]
+    private float _energyDropRateIdle;
+        
+    [SerializeField]
+    private float _energyDropRateMoving;
+    
+    [SerializeField]
+    private float _hydrationMax;
+
+    [SerializeField]
+    private float _hydrationDropRateIdle;
+        
+    [SerializeField]
+    private float _hydrationDropRateMoving;
+    
+    private float _energyCurrent;
+    private float _hydrationCurrent;
+
+    private bool _isEating;
+    private bool _isDrinking;
+
     private void Awake()
     {
         SetIdle();
@@ -18,6 +42,19 @@ public class Nomad : MonoBehaviour
     {
         _isIdle = true;
         InvokeRepeating(nameof(FlipLookDirection), 0, Random.Range(5f, 7f));
+    }
+
+    private void TickStats()
+    {
+        if (_isEating == false)
+        {
+            _energyCurrent -= _isIdle ? _energyDropRateIdle : _energyDropRateMoving;
+        }
+
+        if (_isDrinking == false)
+        {
+            _hydrationCurrent -= _isIdle ? _hydrationDropRateIdle : _hydrationDropRateMoving;
+        }
     }
 
     public void SetMoving()
