@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-public class ObstaclesController : SceneSingleton<ObstaclesController>
+public class PathfindingController : SceneSingleton<PathfindingController>
 {
     private bool[,] _walkableMap;
 
@@ -40,6 +40,32 @@ public class ObstaclesController : SceneSingleton<ObstaclesController>
                     mapY >= 0 && mapY < _walkableMap.GetLength(1))
                 {
                     _walkableMap[mapX, mapY] = false;
+                }
+            }
+        }
+    }
+    
+    public void UnregisterObstacle(Vector2Int coords, Vector2Int size = default)
+    {
+        if (size == default)
+        {
+            if (IsWithinMapBounds(coords, size))
+            {
+                _walkableMap[coords.x, coords.y] = true;
+            }
+        }
+
+        for (int y = 0; y < size.y; y++)
+        {
+            for (int x = 0; x < size.x; x++)
+            {
+                int mapX = coords.x + x;
+                int mapY = coords.y + y;
+
+                if (mapX >= 0 && mapX < _walkableMap.GetLength(0) &&
+                    mapY >= 0 && mapY < _walkableMap.GetLength(1))
+                {
+                    _walkableMap[mapX, mapY] = true;
                 }
             }
         }
@@ -99,7 +125,7 @@ public class ObstaclesController : SceneSingleton<ObstaclesController>
             Vector2Int offsetSamplePoint = sampleCoords[i];
             if (IsAreaWalkable(offsetSamplePoint))
             {
-                walkableSampleOutput |= (byte)(1 << 3 - i);
+                walkableSampleOutput |= (byte) (1 << 3 - i);
             }
         }
 
@@ -127,7 +153,7 @@ public class ObstaclesController : SceneSingleton<ObstaclesController>
             Vector2Int offsetSamplePoint = sampleCoords[i];
             if (IsAreaWalkable(offsetSamplePoint))
             {
-                walkableSampleOutput |= (byte)(1 << 7 - i);
+                walkableSampleOutput |= (byte) (1 << 7 - i);
             }
         }
 
@@ -155,11 +181,110 @@ public class ObstaclesController : SceneSingleton<ObstaclesController>
             Vector2Int offsetSamplePoint = sampleCoords[i];
             if (IsAreaWalkable(offsetSamplePoint))
             {
-                walkableDirections.Add((Direction)i);
+                walkableDirections.Add((Direction) i);
             }
         }
 
         return walkableDirections;
+    }
+
+    public List<Vector2Int> GetShortestPath(Vector2Int start, Vector2Int end)
+    {
+        List<Vector2Int> path = new List<Vector2Int>();
+        Dictionary<Vector2Int, float> distanceMap = new Dictionary<Vector2Int, float>();
+
+        Queue<Vector2Int> searchQueue = new Queue<Vector2Int>();
+        HashSet<Vector2Int> searchedTilesSet = new HashSet<Vector2Int>();
+
+        searchQueue.Enqueue(start);
+        distanceMap.Add(start, 0);
+
+        // Calculate the max distance from the start tile to all other tiles in the dungeon
+        while (searchQueue.Count > 0)
+        {
+            Vector2Int searchTile = searchQueue.Dequeue();
+            searchedTilesSet.Add(searchTile);
+
+            float searchTileDistance = distanceMap[searchTile];
+
+            List<Vector2Int> walkableAdjacentCoords = GetWalkableAdjacentCoords(searchTile);
+
+            foreach (Vector2Int walkableAdjacentCoord in walkableAdjacentCoords)
+            {
+                float distanceToCoord = searchTileDistance + Vector2Int.Distance(searchTile, walkableAdjacentCoord);
+
+                // If we've already found a distance for this coord only replace it if it's shorter from the current tile
+                if (distanceMap.ContainsKey(walkableAdjacentCoord) && distanceToCoord < distanceMap[walkableAdjacentCoord])
+                {
+                    distanceMap[walkableAdjacentCoord] = distanceToCoord;
+                }
+                else
+                {
+                    distanceMap.TryAdd(walkableAdjacentCoord, distanceToCoord);
+                }
+
+                // Check we've not already searched it, and it's not already in the qeue to be searched
+                if (searchedTilesSet.Contains(walkableAdjacentCoord) == false && searchQueue.Contains(walkableAdjacentCoord) == false)
+                {
+                    searchQueue.Enqueue(walkableAdjacentCoord);
+                }
+            }
+        }
+
+        // From the end tile find the shortest path back to the start using the distance map
+        Vector2Int nextTile = end;
+        path.Add(end);
+
+        while (nextTile != start)
+        {
+            List<Vector2Int> adjacentTiles = GetWalkableAdjacentCoords(nextTile);
+
+            float bestNextTileDistance = float.MaxValue;
+
+            foreach (Vector2Int adjacentTile in adjacentTiles)
+            {
+                if (distanceMap[adjacentTile] >= bestNextTileDistance)
+                    continue;
+
+                nextTile = adjacentTile;
+                bestNextTileDistance = distanceMap[adjacentTile];
+            }
+
+            path.Add(nextTile);
+        }
+
+        path.Reverse();
+
+        return path;
+    }
+
+    private List<Vector2Int> GetWalkableAdjacentCoords(Vector2Int centerCoord)
+    {
+        List<Vector2Int> walkableAdjacentCoords = new List<Vector2Int>();
+
+        Vector2Int[] sampleCoords =
+        {
+            new Vector2Int(centerCoord.x, centerCoord.y + 1),
+            new Vector2Int(centerCoord.x + 1, centerCoord.y + 1),
+            new Vector2Int(centerCoord.x + 1, centerCoord.y),
+            new Vector2Int(centerCoord.x + 1, centerCoord.y - 1),
+            new Vector2Int(centerCoord.x, centerCoord.y - 1),
+            new Vector2Int(centerCoord.x - 1, centerCoord.y - 1),
+            new Vector2Int(centerCoord.x - 1, centerCoord.y),
+            new Vector2Int(centerCoord.x - 1, centerCoord.y + 1),
+        };
+
+        for (int i = 0; i < sampleCoords.Length; i++)
+        {
+            Vector2Int offsetSamplePoint = sampleCoords[i];
+
+            if (IsAreaWalkable(offsetSamplePoint))
+            {
+                walkableAdjacentCoords.Add(offsetSamplePoint);
+            }
+        }
+
+        return walkableAdjacentCoords;
     }
 
     private void OnDrawGizmosSelected()

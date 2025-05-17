@@ -27,13 +27,13 @@ public class SceneryController : SceneSingleton<SceneryController>
 
     public void Initialise()
     {
-        List<Vector2Int> walkableSpaces = ObstaclesController.Singleton.GetWalkableSpaces();
+        List<Vector2Int> walkableSpaces = PathfindingController.Singleton.GetWalkableSpaces();
 
         for (int i = 0; i < _startingDeadPlantsCount; i++)
         {
             Vector2Int walkableSpace = walkableSpaces[Random.Range(0, walkableSpaces.Count)];
 
-            if (ObstaclesController.Singleton.IsAreaWalkable(walkableSpace) == false)
+            if (PathfindingController.Singleton.IsAreaWalkable(walkableSpace) == false)
                 continue;
 
             Instantiate(_deadPlantPrefab, new Vector3(walkableSpace.x, walkableSpace.y), Quaternion.identity,
@@ -41,14 +41,14 @@ public class SceneryController : SceneSingleton<SceneryController>
 
             _deadPlantPositions.Add(walkableSpace);
 
-            ObstaclesController.Singleton.RegisterObstacle(walkableSpace, Vector2Int.one * 2);
+            PathfindingController.Singleton.RegisterObstacle(walkableSpace, Vector2Int.one);
         }
 
         for (int i = 0; i < _startingCactusCount; i++)
         {
             Vector2Int walkableSpace = walkableSpaces[Random.Range(0, walkableSpaces.Count)];
 
-            if (ObstaclesController.Singleton.IsAreaWalkable(walkableSpace) == false)
+            if (PathfindingController.Singleton.IsAreaWalkable(walkableSpace) == false)
                 continue;
 
             Instantiate(_cactusPrefab, new Vector3(walkableSpace.x, walkableSpace.y), Quaternion.identity,
@@ -56,14 +56,14 @@ public class SceneryController : SceneSingleton<SceneryController>
 
             _cactusPositions.Add(walkableSpace);
 
-            ObstaclesController.Singleton.RegisterObstacle(walkableSpace, Vector2Int.one * 2);
+            PathfindingController.Singleton.RegisterObstacle(walkableSpace, Vector2Int.one * 2);
         }
 
         for (int i = 0; i < _startingRocksCount; i++)
         {
             Vector2Int walkableSpace = walkableSpaces[Random.Range(0, walkableSpaces.Count)];
 
-            if (ObstaclesController.Singleton.IsAreaWalkable(walkableSpace, Vector2Int.one * 2) == false)
+            if (PathfindingController.Singleton.IsAreaWalkable(walkableSpace, Vector2Int.one * 2) == false)
                 continue;
 
             Instantiate(_rockPrefabs[Random.Range(0, _rockPrefabs.Length)],
@@ -72,7 +72,7 @@ public class SceneryController : SceneSingleton<SceneryController>
 
             _rockPositions.Add(walkableSpace);
 
-            ObstaclesController.Singleton.RegisterObstacle(walkableSpace, Vector2Int.one * 2);
+            PathfindingController.Singleton.RegisterObstacle(walkableSpace, Vector2Int.one * 2);
         }
     }
 }

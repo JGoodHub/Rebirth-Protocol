@@ -52,6 +52,8 @@ public class RiverController : SceneSingleton<RiverController>
 
     [SerializeField]
     private Transform _riverTilesParent;
+    
+    private List<Vector2Int> _riverTilesPositions = new List<Vector2Int>();
 
     public void Initialise()
     {
@@ -66,13 +68,14 @@ public class RiverController : SceneSingleton<RiverController>
 
         foreach (Vector2Int riverBedPoint in riverBedPoints)
         {
-            if (ObstaclesController.Singleton.IsWithinMapBounds(riverBedPoint) == false)
+            if (PathfindingController.Singleton.IsWithinMapBounds(riverBedPoint) == false)
                 continue;
 
             Instantiate(_riverTilePrefab, new Vector3(riverBedPoint.x, riverBedPoint.y), Quaternion.identity,
                 _riverTilesParent);
 
-            ObstaclesController.Singleton.RegisterObstacle(riverBedPoint);
+            PathfindingController.Singleton.RegisterObstacle(riverBedPoint);
+            _riverTilesPositions.Add(riverBedPoint);
 
             for (int yOff = -1; yOff <= 1; yOff++)
             {
@@ -92,7 +95,7 @@ public class RiverController : SceneSingleton<RiverController>
         foreach (Vector2Int effectedRiverPoint in effectedRiverPoints)
         {
             List<Direction> eightPointWalkableDirections =
-                ObstaclesController.Singleton.GetEightPointWalkableDirections(effectedRiverPoint);
+                PathfindingController.Singleton.GetEightPointWalkableDirections(effectedRiverPoint);
 
             RiverTilePair riverTilePair =
                 _riverTilePairs.Find(pair =>
@@ -106,10 +109,19 @@ public class RiverController : SceneSingleton<RiverController>
                 tile.GetComponent<SpriteRenderer>().sprite = sprite;
             }
         }
-
+        
         foreach (Vector2Int effectedRiverPoint in effectedRiverPoints)
         {
-            ObstaclesController.Singleton.RegisterObstacle(effectedRiverPoint);
+            PathfindingController.Singleton.RegisterObstacle(effectedRiverPoint);
+            _riverTilesPositions.Add(effectedRiverPoint);
+        }
+    }
+
+    public void MakeRiversWalkable()
+    {
+        foreach (Vector2Int riverBedPoint in _riverTilesPositions)
+        {
+            PathfindingController.Singleton.UnregisterObstacle(riverBedPoint);
         }
     }
 

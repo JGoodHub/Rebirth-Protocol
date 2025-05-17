@@ -83,7 +83,7 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
             _wasSelectedThisFrame = false;
         }
     }
-
+    
     public void SetIdle()
     {
         _isIdle = true;
@@ -140,6 +140,8 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
         _statsPanel.gameObject.SetActive(true);
 
         _wasSelectedThisFrame = true;
+        
+        NomadController.Singleton.SetSelectedNomad(this);
     }
 
     public void Deselect()
@@ -149,5 +151,7 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
 
         _isSelected = false;
         _statsPanel.gameObject.SetActive(false);
+        
+        NomadController.Singleton.ClearSelectedNomad();
     }
 }

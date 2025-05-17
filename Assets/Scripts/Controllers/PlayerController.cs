@@ -14,6 +14,6 @@ public class PlayerController : SceneSingleton<PlayerController>
     public void Initialise()
     {
         Instantiate(_playerBasePrefab, new Vector3(_baseCoords.x, _baseCoords.y), Quaternion.identity, transform);
-        ObstaclesController.Singleton.RegisterObstacle(_baseCoords, _baseSize);
+        PathfindingController.Singleton.RegisterObstacle(_baseCoords, _baseSize);
     }
 }

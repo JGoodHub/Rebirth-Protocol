@@ -21,6 +21,8 @@ public class NomadController : SceneSingleton<NomadController>
 
     private List<Nomad> _nomads = new List<Nomad>();
 
+    private Nomad _selectedNomad;
+
     private void Start()
     {
         TouchInput.OnTouchUp += OnTouchUp;
@@ -36,13 +38,13 @@ public class NomadController : SceneSingleton<NomadController>
 
     public void Initialise()
     {
-        List<Vector2Int> walkableSpaces = ObstaclesController.Singleton.GetWalkableSpaces();
+        List<Vector2Int> walkableSpaces = PathfindingController.Singleton.GetWalkableSpaces();
 
         for (int i = 0; i < _startingTentsCount; i++)
         {
             Vector2Int walkableSpace = walkableSpaces[Random.Range(0, walkableSpaces.Count)];
 
-            if (ObstaclesController.Singleton.IsAreaWalkable(walkableSpace, Vector2Int.one * 3) == false)
+            if (PathfindingController.Singleton.IsAreaWalkable(walkableSpace, Vector2Int.one * 3) == false)
                 continue;
 
             Instantiate(_tentPrefab, new Vector3(walkableSpace.x, walkableSpace.y), Quaternion.identity,
@@ -50,14 +52,14 @@ public class NomadController : SceneSingleton<NomadController>
 
             _tentPositions.Add(walkableSpace);
 
-            ObstaclesController.Singleton.RegisterObstacle(walkableSpace, Vector2Int.one * 3);
+            PathfindingController.Singleton.RegisterObstacle(walkableSpace, Vector2Int.one * 3);
         }
 
         for (int i = 0; i < _startingNomadsCount; i++)
         {
             Vector2Int walkableSpace = walkableSpaces[Random.Range(0, walkableSpaces.Count)];
 
-            if (ObstaclesController.Singleton.IsAreaWalkable(walkableSpace) == false)
+            if (PathfindingController.Singleton.IsAreaWalkable(walkableSpace) == false)
                 continue;
 
             Nomad nomad = Instantiate(_nomadPrefab, new Vector3(walkableSpace.x, walkableSpace.y), Quaternion.identity,
@@ -67,6 +69,16 @@ public class NomadController : SceneSingleton<NomadController>
 
             _nomads.Add(nomad);
         }
+    }
+
+    public void SetSelectedNomad(Nomad nomad)
+    {
+        _selectedNomad = nomad;
+    }
+
+    public void ClearSelectedNomad()
+    {
+        _selectedNomad = null;
     }
 
     public void DeselectAllNomads()
