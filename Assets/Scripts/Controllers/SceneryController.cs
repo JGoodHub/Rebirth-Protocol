@@ -71,14 +71,14 @@ public class SceneryController : SceneSingleton<SceneryController>
             PathfindingController.Singleton.RegisterObstacle(walkableSpace, obstacleSize);
         }
     }
-    
+
     public Harvestable GetNearestUnreservedWaterSource(Vector2Int position)
     {
         return _cacti
             .Where(cactus => cactus.HealthPercentage > 0.8f && cactus.IsReserved == false)
             .MinItem(cactus => Vector2.Distance(cactus.transform.position, position));
     }
-    
+
     public Harvestable GetNearestUnreservedHarvestablePlant(Vector2Int position)
     {
         return _plants
@@ -89,5 +89,38 @@ public class SceneryController : SceneSingleton<SceneryController>
     public void RemoveReservationOnDeath(Nomad deadNomad)
     {
         _cacti.Find(item => item.IsReservedBy(deadNomad))?.ClearReservation();
+    }
+
+    public List<Harvestable> GetHarvestablesInArea(Vector2Int min, Vector2Int size)
+    {
+        HashSet<Vector2Int> positions = new HashSet<Vector2Int>();
+
+        for (int x = min.x; x < min.x + size.x; x++)
+        {
+            for (int y = min.y; y < min.y + size.y; y++)
+            {
+                positions.Add(new Vector2Int(x, y));
+            }
+        }
+
+        List<Harvestable> harvestables = new List<Harvestable>();
+
+        foreach (Harvestable plant in _plants)
+        {
+            if (positions.Contains(plant.Coords))
+            {
+                harvestables.Add(plant);
+            }
+        }
+
+        foreach (Harvestable cactus in _cacti)
+        {
+            if (positions.Contains(cactus.Coords))
+            {
+                harvestables.Add(cactus);
+            }
+        }
+
+        return harvestables;
     }
 }

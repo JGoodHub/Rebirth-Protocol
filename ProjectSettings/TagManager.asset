@@ -50,6 +50,9 @@ TagManager:
   - name: Characters
     uniqueID: 658479205
     locked: 0
+  - name: Clouds
+    uniqueID: 1787352737
+    locked: 0
   - name: Overlay
     uniqueID: 1846695147
     locked: 0

@@ -52,7 +52,7 @@ public class CameraDragController2D : SceneSingleton<CameraDragController2D>
 
     private void Update()
     {
-        transform.position = Vector3.Lerp(transform.position, _dragPosition, 0.5f);
+        transform.position = Vector3.Lerp(transform.position, _dragPosition, 0.34f);
 
         if (_lockToBounds)
         {

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e4c9387c434afe940982c2a41e2fefe5
+guid: e3355e2d26c4747a6aab97b6cdd68ba1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -330946664044184760
-    second: Cloud 4_0
+      213: 5839820706974066888
+    second: cross_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -139,13 +139,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Cloud 4_0
+      name: cross_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 88
-        height: 34
+        x: 17
+        y: 15
+        width: 66
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,8 +153,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 84bbb0233cd386bf0800000000000000
-      internalID: -330946664044184760
+      spriteID: 8c8e8270ef53b0150800000000000000
+      internalID: 5839820706974066888
       vertices: []
       indices: 
       edges: []
@@ -169,8 +169,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      Cloud 4_0: -330946664044184760
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

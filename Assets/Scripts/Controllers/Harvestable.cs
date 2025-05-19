@@ -150,4 +150,9 @@ public class Harvestable : MonoBehaviour
 
         return _reservee == nomad;
     }
+
+    public void BoostHealth(float bonus)
+    {
+        _health = Mathf.Clamp(_health + bonus, 0f, _maxHealth);
+    }
 }

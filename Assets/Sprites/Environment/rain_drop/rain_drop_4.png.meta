@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e4c9387c434afe940982c2a41e2fefe5
+guid: f78595feda808424db2a43541de05caa
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -330946664044184760
-    second: Cloud 4_0
+      213: -26817973084451121
+    second: rain_drop_4_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -139,13 +139,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Cloud 4_0
+      name: rain_drop_4_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 88
-        height: 34
+        width: 40
+        height: 40
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,8 +153,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 84bbb0233cd386bf0800000000000000
-      internalID: -330946664044184760
+      spriteID: fce84b01239b0aff0800000000000000
+      internalID: -26817973084451121
       vertices: []
       indices: 
       edges: []
@@ -170,7 +170,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Cloud 4_0: -330946664044184760
+      rain_drop_4_0: -26817973084451121
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
