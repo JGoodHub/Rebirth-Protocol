@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+
 
 public class NomadController : SceneSingleton<NomadController>
 {
@@ -54,6 +54,8 @@ public class NomadController : SceneSingleton<NomadController>
 
             PathfindingController.Singleton.RegisterObstacle(walkableSpace, Vector2Int.one * 3);
         }
+        
+        walkableSpaces = PathfindingController.Singleton.GetWalkableSpaces();
 
         for (int i = 0; i < _startingNomadsCount; i++)
         {
@@ -69,6 +71,16 @@ public class NomadController : SceneSingleton<NomadController>
 
             _nomads.Add(nomad);
         }
+        
+        // walkableSpaces = PathfindingController.Singleton.GetWalkableSpaces();
+        //
+        // foreach (Nomad nomad in _nomads)
+        // {
+        //     nomad.CompleteActions(new List<NomadAction>
+        //     {
+        //         new WalkToCoordNomadAction(nomad, walkableSpaces[Random.Range(0, walkableSpaces.Count)])
+        //     });
+        // }
     }
 
     public void SetSelectedNomad(Nomad nomad)

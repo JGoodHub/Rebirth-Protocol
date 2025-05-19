@@ -44,7 +44,7 @@ public class PathfindingController : SceneSingleton<PathfindingController>
             }
         }
     }
-    
+
     public void UnregisterObstacle(Vector2Int coords, Vector2Int size = default)
     {
         if (size == default)
@@ -190,6 +190,18 @@ public class PathfindingController : SceneSingleton<PathfindingController>
 
     public List<Vector2Int> GetShortestPath(Vector2Int start, Vector2Int end)
     {
+        if (_walkableMap[start.x, start.y] == false || _walkableMap[end.x, end.y] == false)
+        {
+            Debug.LogError("Attempted to navigate to/from an unwalkable space.");
+            return new List<Vector2Int>();
+        }
+
+        if (start == end)
+        {
+            Debug.LogWarning("Start and End coordinate are the same.");
+            return new List<Vector2Int>();
+        }
+
         List<Vector2Int> path = new List<Vector2Int>();
         Dictionary<Vector2Int, float> distanceMap = new Dictionary<Vector2Int, float>();
 

@@ -726,6 +726,8 @@ MonoBehaviour:
   _healthFillImage: {fileID: 1530033442140987947}
   _hydrationFillImage: {fileID: 4510417856923570828}
   _energyFillImage: {fileID: 8017867153772138011}
+  _movementSpeed: 1
+  _animator: {fileID: 3697662888322089497}
 --- !u!1 &7369135562700985479
 GameObject:
   m_ObjectHideFlags: 0

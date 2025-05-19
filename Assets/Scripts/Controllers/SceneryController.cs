@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SceneryController : SceneSingleton<SceneryController>
@@ -22,7 +23,7 @@ public class SceneryController : SceneSingleton<SceneryController>
     private int _startingRocksCount = 20;
 
     private List<Vector2Int> _deadPlantPositions = new List<Vector2Int>();
-    private List<Vector2Int> _cactusPositions = new List<Vector2Int>();
+    private List<Harvestable> _cacti = new List<Harvestable>();
     private List<Vector2Int> _rockPositions = new List<Vector2Int>();
 
     public void Initialise()
@@ -44,6 +45,8 @@ public class SceneryController : SceneSingleton<SceneryController>
             PathfindingController.Singleton.RegisterObstacle(walkableSpace, Vector2Int.one);
         }
 
+        walkableSpaces = PathfindingController.Singleton.GetWalkableSpaces();
+
         for (int i = 0; i < _startingCactusCount; i++)
         {
             Vector2Int walkableSpace = walkableSpaces[Random.Range(0, walkableSpaces.Count)];
@@ -51,13 +54,15 @@ public class SceneryController : SceneSingleton<SceneryController>
             if (PathfindingController.Singleton.IsAreaWalkable(walkableSpace) == false)
                 continue;
 
-            Instantiate(_cactusPrefab, new Vector3(walkableSpace.x, walkableSpace.y), Quaternion.identity,
-                transform);
+            Harvestable cactus = Instantiate(_cactusPrefab, new Vector3(walkableSpace.x, walkableSpace.y), Quaternion.identity,
+                transform).GetComponent<Harvestable>();
 
-            _cactusPositions.Add(walkableSpace);
+            _cacti.Add(cactus);
 
-            PathfindingController.Singleton.RegisterObstacle(walkableSpace, Vector2Int.one * 2);
+            PathfindingController.Singleton.RegisterObstacle(walkableSpace, new Vector2Int(1, 2));
         }
+
+        walkableSpaces = PathfindingController.Singleton.GetWalkableSpaces();
 
         for (int i = 0; i < _startingRocksCount; i++)
         {
@@ -74,5 +79,12 @@ public class SceneryController : SceneSingleton<SceneryController>
 
             PathfindingController.Singleton.RegisterObstacle(walkableSpace, Vector2Int.one * 2);
         }
+    }
+
+    public Harvestable GetNearestUnreservedWaterSource(Vector2Int position)
+    {
+        return _cacti
+            .Where(cactus => cactus.HealthPercentage > 0.8f && cactus.IsReserved == false)
+            .MinItem(cactus => Vector2.Distance(cactus.transform.position, position));
     }
 }
