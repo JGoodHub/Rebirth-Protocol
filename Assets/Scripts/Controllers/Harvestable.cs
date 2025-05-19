@@ -20,6 +20,9 @@ public class Harvestable : MonoBehaviour
     private float _energyAmount;
 
     [SerializeField]
+    private float _seedsAmount;
+
+    [SerializeField]
     private float _maxHealth;
 
     [SerializeField]
@@ -34,6 +37,12 @@ public class Harvestable : MonoBehaviour
     [SerializeField]
     private List<Vector2Int> _harvestingSlots;
 
+    [SerializeField]
+    private bool _startAtMaxHealth;
+
+    [SerializeField]
+    private bool _startAtRandomHealth;
+
     private bool _beingHarvested;
 
     private float _health;
@@ -42,7 +51,8 @@ public class Harvestable : MonoBehaviour
 
     public float HealthPercentage => _health / _maxHealth;
 
-    public Vector2Int Coords => new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
+    public Vector2Int Coords =>
+        new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
 
     public List<Vector2Int> HarvestingSlots => _harvestingSlots.Select(slot => Coords + slot).ToList();
 
@@ -50,7 +60,15 @@ public class Harvestable : MonoBehaviour
 
     private void Awake()
     {
-        _health = _maxHealth;
+        if (_startAtMaxHealth)
+        {
+            _health = _maxHealth;
+        }
+        else if (_startAtRandomHealth)
+        {
+            _health = UnityEngine.Random.Range(0, _maxHealth);
+        }
+
         UpdateVisualGameObject();
     }
 
@@ -78,13 +96,20 @@ public class Harvestable : MonoBehaviour
     {
         foreach (DisplayStage displayStage in _displayStages)
         {
-            displayStage.VisualGameObject.SetActive(_health > displayStage.ValueRange.x && _health <= displayStage.ValueRange.y);
+            displayStage.VisualGameObject.SetActive(displayStage.ValueRange.x <= _health &&
+                                                    _health < displayStage.ValueRange.y);
         }
     }
 
     public void Reserve(Nomad nomad)
     {
         _reservee = nomad;
+    }
+
+    public void ClearReservation()
+    {
+        _beingHarvested = false;
+        _reservee = null;
     }
 
     public void Harvest(Nomad nomad, Action completedCallback)
@@ -105,15 +130,24 @@ public class Harvestable : MonoBehaviour
 
         while (_health > 0f)
         {
-            nomad.ApplyStatChanges(0f, hydrationPerTick, energyPerTick);
+            nomad.ApplyStatChanges(0f, hydrationPerTick, energyPerTick, 0f);
 
             _health = Mathf.Clamp(_health - _harvestRate, 0f, _maxHealth);
 
             yield return new WaitForSeconds(1f);
         }
 
+        nomad.ApplyStatChanges(0f, 0f, 0f, _seedsAmount);
+        ClearReservation();
+
         completedCallback?.Invoke();
-        _beingHarvested = false;
-        _reservee = null;
+    }
+
+    public bool IsReservedBy(Nomad nomad)
+    {
+        if (_reservee == null)
+            return false;
+
+        return _reservee == nomad;
     }
 }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,6 +11,7 @@ using Random = UnityEngine.Random;
 public class Nomad : MonoBehaviour, IPointerClickHandler
 {
     private static readonly int IsMoving = Animator.StringToHash("IsMoving");
+    private static readonly int IsDead = Animator.StringToHash("IsDead");
 
     [SerializeField]
     private Transform _spriteTransform;
@@ -41,6 +44,9 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
     private float _energyDropRateMoving;
 
     [SerializeField]
+    private float _movementSpeed;
+
+    [SerializeField]
     private Image _healthFillImage;
 
     [SerializeField]
@@ -50,7 +56,7 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
     private Image _energyFillImage;
 
     [SerializeField]
-    private float _movementSpeed;
+    private TextMeshProUGUI _seedsCountText;
 
     [SerializeField]
     private Animator _animator;
@@ -58,10 +64,12 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
     private bool _isSelected;
     private bool _wasSelectedThisFrame;
     private bool _isIdle;
+    private bool _isDead;
 
     private float _healthCurrent;
     private float _hydrationCurrent;
     private float _energyCurrent;
+    private float _seedsCurrent;
 
     private bool _isEating;
     private bool _isDrinking;
@@ -74,7 +82,8 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
 
     public float EnergyPercentage => _energyCurrent / _energyMax;
 
-    public Vector2Int Coords => new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
+    public Vector2Int Coords =>
+        new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
 
     private void Awake()
     {
@@ -86,18 +95,9 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
         Deselect();
 
         InvokeRepeating(nameof(FlipLookDirectionWhenIdle), 0, Random.Range(5f, 7f));
+        InvokeRepeating(nameof(TickStats), 0f, 1f);
 
         AssignNewActions();
-    }
-
-    private void OnEnable()
-    {
-        InvokeRepeating(nameof(TickStats), 0f, 1f);
-    }
-
-    private void OnDisable()
-    {
-        CancelInvoke(nameof(TickStats));
     }
 
     private void LateUpdate()
@@ -108,6 +108,19 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
         }
 
         _lastFramePosition = transform.position;
+    }
+
+    private void Die()
+    {
+        StopAllCoroutines();
+
+        CancelInvoke(nameof(FlipLookDirectionWhenIdle));
+        CancelInvoke(nameof(TickStats));
+
+        Deselect();
+
+        _animator.SetBool(IsDead, true);
+        SceneryController.Singleton.RemoveReservationOnDeath(this);
     }
 
     public void CompleteActions(List<NomadAction> newActions)
@@ -138,29 +151,51 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
     {
         List<NomadAction> newActions = new List<NomadAction>();
 
-        if (HydrationPercentage < 0.6f)
+        if (HydrationPercentage < 0.5f)
         {
             Harvestable nearestWaterSource = SceneryController.Singleton.GetNearestUnreservedWaterSource(Coords);
 
             if (nearestWaterSource != null)
             {
                 nearestWaterSource.Reserve(this);
-                Vector2Int closestSlot = nearestWaterSource.HarvestingSlots.MinItem(slot => Vector2.Distance(slot, transform.position));
+                Vector2Int closestSlot =
+                    nearestWaterSource.HarvestingSlots.MinItem(slot => Vector2.Distance(slot, transform.position));
                 WalkToCoordNomadAction walkToCoordNomadAction = new WalkToCoordNomadAction(this, closestSlot);
                 newActions.Add(walkToCoordNomadAction);
 
                 HarvestNomadAction harvestNomadAction = new HarvestNomadAction(this, nearestWaterSource);
                 newActions.Add(harvestNomadAction);
             }
-            else
-            {
-                newActions.Add(new WaitNomadAction(this, 3f));
-            }
         }
-        else if (EnergyPercentage < 0.4f) { }
+        else if (EnergyPercentage < 0.35f) { }
         else
         {
-            newActions.Add(new WaitNomadAction(this, 3f));
+            if (_seedsCurrent == 0f)
+            {
+                Harvestable harvestablePlant = SceneryController.Singleton.GetNearestUnreservedHarvestablePlant(Coords);
+
+                if (harvestablePlant != null)
+                {
+                    harvestablePlant.Reserve(this);
+                    Vector2Int closestSlot =
+                        harvestablePlant.HarvestingSlots.MinItem(slot => Vector2.Distance(slot, transform.position));
+                    WalkToCoordNomadAction walkToCoordNomadAction = new WalkToCoordNomadAction(this, closestSlot);
+                    newActions.Add(walkToCoordNomadAction);
+
+                    HarvestNomadAction harvestNomadAction = new HarvestNomadAction(this, harvestablePlant);
+                    newActions.Add(harvestNomadAction);
+                }
+            }
+            else
+            {
+                // TODO Plant the seeds we have
+            }
+        }
+
+        // Poll for a new set of actions again in 2 seconds
+        if (newActions.Count == 0)
+        {
+            newActions.Add(new WaitNomadAction(this, 2f));
         }
 
         CompleteActions(newActions);
@@ -170,12 +205,15 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
     {
         if (_isDrinking == false)
         {
-            _hydrationCurrent = Mathf.Clamp(_hydrationCurrent - (_isIdle ? _hydrationDropRateIdle : _hydrationDropRateMoving), 0f, _hydrationMax);
+            _hydrationCurrent =
+                Mathf.Clamp(_hydrationCurrent - (_isIdle ? _hydrationDropRateIdle : _hydrationDropRateMoving), 0f,
+                    _hydrationMax);
         }
 
         if (_isEating == false)
         {
-            _energyCurrent = Mathf.Clamp(_energyCurrent - (_isIdle ? _energyDropRateIdle : _energyDropRateMoving), 0f, _energyMax);
+            _energyCurrent = Mathf.Clamp(_energyCurrent - (_isIdle ? _energyDropRateIdle : _energyDropRateMoving), 0f,
+                _energyMax);
         }
 
         if (_hydrationCurrent <= 0f || _energyCurrent <= 0f)
@@ -198,6 +236,13 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
         _healthFillImage.fillAmount = _healthCurrent / _healthMax;
         _hydrationFillImage.fillAmount = _hydrationCurrent / _hydrationMax;
         _energyFillImage.fillAmount = _energyCurrent / _energyMax;
+
+        _seedsCountText.text = Mathf.RoundToInt(_seedsCurrent).ToString();
+
+        if (_healthCurrent <= 0f)
+        {
+            Die();
+        }
     }
 
     public void SetIdle()
@@ -276,7 +321,7 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
         float time = 0f;
         float duration = pathLength / _movementSpeed;
 
-        Vector3 start = (Vector2) path[0];
+        Vector3 start = (Vector2)path[0];
         transform.position = start;
 
         while (time < duration)
@@ -306,17 +351,18 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
             time += Time.deltaTime;
         }
 
-        transform.position = (Vector2) path[^1];
+        transform.position = (Vector2)path[^1];
 
         SetIdle();
 
         completedCallback?.Invoke();
     }
 
-    public void ApplyStatChanges(float healthChange, float hydrationChange, float energyChange)
+    public void ApplyStatChanges(float healthChange, float hydrationChange, float energyChange, float seedsChange)
     {
         _healthCurrent = Mathf.Clamp(_healthCurrent + healthChange, 0f, _healthMax);
         _hydrationCurrent = Mathf.Clamp(_hydrationCurrent + hydrationChange, 0f, _hydrationMax);
         _energyCurrent = Mathf.Clamp(_energyCurrent + energyChange, 0f, _energyMax);
+        _seedsCurrent += seedsChange;
     }
 }

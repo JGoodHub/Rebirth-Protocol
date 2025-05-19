@@ -1143,9 +1143,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tentPrefab: {fileID: 7454466311546551173, guid: 1cced66d00f84406990bb37d16619aa6, type: 3}
-  _startingTentsCount: 6
+  _startingTentsCount: 10
   _nomadPrefab: {fileID: 6712261985201689801, guid: 31914ce67cb4b45f885ac4033150c37e, type: 3}
-  _startingNomadsCount: 6
+  _startingNomadsCount: 20
 --- !u!1 &98405493
 GameObject:
   m_ObjectHideFlags: 0
@@ -18094,15 +18094,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae265bf82da349d988f43ab922082505, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _deadPlantPrefab: {fileID: 6909334456380310755, guid: d0d75b9b9dc1d475892c0e79a1db07ab, type: 3}
-  _startingDeadPlantsCount: 40
+  _plantPrefab: {fileID: 6909334456380310755, guid: d0d75b9b9dc1d475892c0e79a1db07ab, type: 3}
+  _startingPlantsCount: 40
   _cactusPrefab: {fileID: 6111833826297666476, guid: cb015706d60a2463892b4df6ec98a565, type: 3}
-  _startingCactusCount: 10
+  _startingCactiCount: 15
   _rockPrefabs:
   - {fileID: 2604593705552975614, guid: 40c7f885c1e6049e9a2f7c4104eed214, type: 3}
   - {fileID: 9017555481543366420, guid: 93a67fce57cdc4f43948963bdcf69f89, type: 3}
   - {fileID: 6283538027418257084, guid: bee74f000ad554ab895317e28eb1b1c7, type: 3}
-  _startingRocksCount: 20
+  _startingRocksCount: 40
 --- !u!4 &1762412222
 Transform:
   m_ObjectHideFlags: 0
