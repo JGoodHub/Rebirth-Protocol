@@ -799,8 +799,8 @@ MonoBehaviour:
   _harvestingSlots:
   - {x: -1, y: 0}
   - {x: 1, y: 0}
-  _startAtMaxHealth: 0
-  _startAtRandomHealth: 1
+  _startAtMaxHealth: 1
+  _startAtRandomHealth: 0
 --- !u!1 &7020252312650910096
 GameObject:
   m_ObjectHideFlags: 0
@@ -1074,7 +1074,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3001096492716240630
 Transform:
   m_ObjectHideFlags: 0

@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SceneryController : SceneSingleton<SceneryController>
 {
@@ -9,6 +11,12 @@ public class SceneryController : SceneSingleton<SceneryController>
 
     [SerializeField]
     private int _startingPlantsCount = 30;
+
+    [SerializeField]
+    private int _spreadRadius = 4;
+
+    [SerializeField]
+    private GameObject _grassTilePrefab;
 
     [SerializeField]
     private GameObject _cactusPrefab;
@@ -26,11 +34,19 @@ public class SceneryController : SceneSingleton<SceneryController>
     private List<Harvestable> _cacti = new List<Harvestable>();
     private List<Vector2Int> _rockPositions = new List<Vector2Int>();
 
+    private HashSet<Vector2Int> _barrenTiles;
+    private HashSet<Vector2Int> _grassTiles;
+
+    private void Awake()
+    {
+        InvokeRepeating(nameof(SpreadVegetation), 5f, 5f);
+    }
+
     public void Initialise()
     {
-        SpawnHarvestable(_plantPrefab, _startingPlantsCount, Vector2Int.one, ref _plants);
+        SpawnHarvestable(_plantPrefab, _startingPlantsCount, Vector2Int.one, false, ref _plants);
 
-        SpawnHarvestable(_cactusPrefab, _startingCactiCount, new Vector2Int(1, 2), ref _cacti);
+        SpawnHarvestable(_cactusPrefab, _startingCactiCount, new Vector2Int(1, 2), true, ref _cacti);
 
         List<Vector2Int> walkableSpaces = PathfindingController.Singleton.GetWalkableSpaces();
 
@@ -49,9 +65,13 @@ public class SceneryController : SceneSingleton<SceneryController>
 
             PathfindingController.Singleton.RegisterObstacle(walkableSpace, Vector2Int.one * 2);
         }
+
+        _barrenTiles = new HashSet<Vector2Int>(PathfindingController.Singleton.GetWalkableSpaces());
+        _grassTiles = new HashSet<Vector2Int>();
     }
 
-    public void SpawnHarvestable(GameObject prefab, int count, Vector2Int obstacleSize, ref List<Harvestable> container)
+    public void SpawnHarvestable(GameObject prefab, int count, Vector2Int size, bool isObstacle,
+        ref List<Harvestable> container)
     {
         List<Vector2Int> walkableSpaces = PathfindingController.Singleton.GetWalkableSpaces();
 
@@ -59,7 +79,7 @@ public class SceneryController : SceneSingleton<SceneryController>
         {
             Vector2Int walkableSpace = walkableSpaces[Random.Range(0, walkableSpaces.Count)];
 
-            if (PathfindingController.Singleton.IsAreaWalkable(walkableSpace, obstacleSize) == false)
+            if (PathfindingController.Singleton.IsAreaWalkable(walkableSpace, size) == false)
                 continue;
 
             Harvestable spawnedObject = Instantiate(prefab, new Vector3(walkableSpace.x, walkableSpace.y),
@@ -68,7 +88,10 @@ public class SceneryController : SceneSingleton<SceneryController>
 
             container.Add(spawnedObject);
 
-            PathfindingController.Singleton.RegisterObstacle(walkableSpace, obstacleSize);
+            if (isObstacle)
+            {
+                PathfindingController.Singleton.RegisterObstacle(walkableSpace, size);
+            }
         }
     }
 
@@ -122,5 +145,27 @@ public class SceneryController : SceneSingleton<SceneryController>
         }
 
         return harvestables;
+    }
+
+    private void SpreadVegetation()
+    {
+        foreach (Harvestable plant in _plants)
+        {
+            if (plant.HealthPercentage < 0.82f)
+                continue;
+
+            Vector2Int nearestBarrenTile = _barrenTiles
+                .Where(tile => Vector2Int.Distance(plant.Coords, tile) <= _spreadRadius)
+                .OrderBy(tile => Vector2Int.Distance(plant.Coords, tile))
+                .FirstOrDefault();
+
+            if (nearestBarrenTile == default)
+                continue;
+
+            Instantiate(_grassTilePrefab, (Vector2)nearestBarrenTile, Quaternion.identity, transform);
+
+            _barrenTiles.Remove(nearestBarrenTile);
+            _grassTiles.Add(nearestBarrenTile);
+        }
     }
 }

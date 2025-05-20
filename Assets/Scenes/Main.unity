@@ -2157,7 +2157,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 10}
-  m_SizeDelta: {x: 170, y: 170}
+  m_SizeDelta: {x: 210, y: 170}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!1 &194357290
 GameObject:
@@ -18200,7 +18200,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 125, y: 131}
+  m_SizeDelta: {x: 159, y: 131}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1724166809
 MonoBehaviour:
@@ -18752,6 +18752,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _plantPrefab: {fileID: 6909334456380310755, guid: d0d75b9b9dc1d475892c0e79a1db07ab, type: 3}
   _startingPlantsCount: 40
+  _spreadRadius: 4
+  _grassTilePrefab: {fileID: 4922280777756557943, guid: cd319c47698cd4c569f2024329328121, type: 3}
   _cactusPrefab: {fileID: 6111833826297666476, guid: cb015706d60a2463892b4df6ec98a565, type: 3}
   _startingCactiCount: 15
   _rockPrefabs:
@@ -19642,7 +19644,6 @@ MonoBehaviour:
   _mapSize: {x: 102, y: 62}
   _terrainParent: {fileID: 562734678}
   _terrainPrefab: {fileID: 4922280777756557943, guid: 9b36b9aba5f50294eb6b3b590aa7e3d4, type: 3}
-  _sceneryParent: {fileID: 0}
 --- !u!4 &1821696742
 Transform:
   m_ObjectHideFlags: 0
@@ -21040,7 +21041,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1953512207
 MonoBehaviour:
   m_ObjectHideFlags: 0

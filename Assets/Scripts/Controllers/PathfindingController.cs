@@ -125,7 +125,7 @@ public class PathfindingController : SceneSingleton<PathfindingController>
             Vector2Int offsetSamplePoint = sampleCoords[i];
             if (IsAreaWalkable(offsetSamplePoint))
             {
-                walkableSampleOutput |= (byte) (1 << 3 - i);
+                walkableSampleOutput |= (byte)(1 << 3 - i);
             }
         }
 
@@ -153,7 +153,7 @@ public class PathfindingController : SceneSingleton<PathfindingController>
             Vector2Int offsetSamplePoint = sampleCoords[i];
             if (IsAreaWalkable(offsetSamplePoint))
             {
-                walkableSampleOutput |= (byte) (1 << 7 - i);
+                walkableSampleOutput |= (byte)(1 << 7 - i);
             }
         }
 
@@ -181,7 +181,7 @@ public class PathfindingController : SceneSingleton<PathfindingController>
             Vector2Int offsetSamplePoint = sampleCoords[i];
             if (IsAreaWalkable(offsetSamplePoint))
             {
-                walkableDirections.Add((Direction) i);
+                walkableDirections.Add((Direction)i);
             }
         }
 
@@ -226,7 +226,8 @@ public class PathfindingController : SceneSingleton<PathfindingController>
                 float distanceToCoord = searchTileDistance + Vector2Int.Distance(searchTile, walkableAdjacentCoord);
 
                 // If we've already found a distance for this coord only replace it if it's shorter from the current tile
-                if (distanceMap.ContainsKey(walkableAdjacentCoord) && distanceToCoord < distanceMap[walkableAdjacentCoord])
+                if (distanceMap.ContainsKey(walkableAdjacentCoord) &&
+                    distanceToCoord < distanceMap[walkableAdjacentCoord])
                 {
                     distanceMap[walkableAdjacentCoord] = distanceToCoord;
                 }
@@ -236,7 +237,8 @@ public class PathfindingController : SceneSingleton<PathfindingController>
                 }
 
                 // Check we've not already searched it, and it's not already in the qeue to be searched
-                if (searchedTilesSet.Contains(walkableAdjacentCoord) == false && searchQueue.Contains(walkableAdjacentCoord) == false)
+                if (searchedTilesSet.Contains(walkableAdjacentCoord) == false &&
+                    searchQueue.Contains(walkableAdjacentCoord) == false)
                 {
                     searchQueue.Enqueue(walkableAdjacentCoord);
                 }
@@ -322,9 +324,9 @@ public class PathfindingController : SceneSingleton<PathfindingController>
     {
         List<Vector2Int> walkableSpaces = new List<Vector2Int>();
 
-        for (int y = 0; y < _walkableMap.GetLength(1); y++)
+        for (int y = 1; y < _walkableMap.GetLength(1) - 1; y++)
         {
-            for (int x = 0; x < _walkableMap.GetLength(0); x++)
+            for (int x = 1; x < _walkableMap.GetLength(0) - 1; x++)
             {
                 if (_walkableMap[x, y])
                 {

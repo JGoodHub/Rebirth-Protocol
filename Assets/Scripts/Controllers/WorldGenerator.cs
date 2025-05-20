@@ -14,9 +14,6 @@ public class WorldGenerator : SceneSingleton<WorldGenerator>
     [SerializeField]
     private GameObject _terrainPrefab;
 
-    [SerializeField]
-    private Transform _sceneryParent;
-
     private TerrainCell[,] _terrainCells;
 
     public Vector2Int MapSize => _mapSize;

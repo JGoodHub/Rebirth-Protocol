@@ -54,7 +54,7 @@ public class NomadController : SceneSingleton<NomadController>
 
             PathfindingController.Singleton.RegisterObstacle(walkableSpace, Vector2Int.one * 3);
         }
-        
+
         walkableSpaces = PathfindingController.Singleton.GetWalkableSpaces();
 
         for (int i = 0; i < _startingNomadsCount; i++)
@@ -71,7 +71,7 @@ public class NomadController : SceneSingleton<NomadController>
 
             _nomads.Add(nomad);
         }
-        
+
         // walkableSpaces = PathfindingController.Singleton.GetWalkableSpaces();
         //
         // foreach (Nomad nomad in _nomads)

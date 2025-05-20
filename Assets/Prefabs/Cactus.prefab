@@ -305,7 +305,9 @@ MonoBehaviour:
   _harvestingSlots:
   - {x: -1, y: 0}
   - {x: 1, y: 0}
+  - {x: 0, y: -1}
   _startAtMaxHealth: 1
+  _startAtRandomHealth: 0
 --- !u!1 &6249638036088601623
 GameObject:
   m_ObjectHideFlags: 0
