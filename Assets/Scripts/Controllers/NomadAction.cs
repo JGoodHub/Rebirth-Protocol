@@ -87,3 +87,22 @@ public class HarvestNomadAction : NomadAction
         });
     }
 }
+
+public class PlantSeedNomadAction : NomadAction
+{
+    private Vector2Int _coord;
+
+    public PlantSeedNomadAction(Nomad nomad, Vector2Int coord) : base(nomad)
+    {
+        _coord = coord;
+    }
+
+    protected override void ProcessAction()
+    {
+        SceneryController.Singleton.PlantSeed(_coord);
+        _nomad.RemoveSeed();
+        _isCompleted = true;
+        _nomad.SetIdle();
+
+    }
+}

@@ -151,8 +151,8 @@ public class Harvestable : MonoBehaviour
         return _reservee == nomad;
     }
 
-    public void BoostHealth(float bonus)
+    public void ChangeHealth(float amount)
     {
-        _health = Mathf.Clamp(_health + bonus, 0f, _maxHealth);
+        _health = Mathf.Clamp(_health + amount, 0f, _maxHealth);
     }
 }

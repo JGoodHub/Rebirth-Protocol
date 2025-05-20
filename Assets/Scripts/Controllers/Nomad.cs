@@ -151,7 +151,7 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
     {
         List<NomadAction> newActions = new List<NomadAction>();
 
-        if (HydrationPercentage < 0.5f)
+        if (HydrationPercentage < 0.5f || EnergyPercentage < 0.35f)
         {
             Harvestable nearestWaterSource = SceneryController.Singleton.GetNearestUnreservedWaterSource(Coords);
 
@@ -167,7 +167,6 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
                 newActions.Add(harvestNomadAction);
             }
         }
-        else if (EnergyPercentage < 0.35f) { }
         else
         {
             if (_seedsCurrent == 0f)
@@ -177,6 +176,7 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
                 if (harvestablePlant != null)
                 {
                     harvestablePlant.Reserve(this);
+
                     Vector2Int closestSlot =
                         harvestablePlant.HarvestingSlots.MinItem(slot => Vector2.Distance(slot, transform.position));
                     WalkToCoordNomadAction walkToCoordNomadAction = new WalkToCoordNomadAction(this, closestSlot);
@@ -188,7 +188,13 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
             }
             else
             {
-                // TODO Plant the seeds we have
+                Vector2Int randomBarrenTile = SceneryController.Singleton.PickRandomBarrenTile();
+
+                WalkToCoordNomadAction walkToCoordNomadAction = new WalkToCoordNomadAction(this, randomBarrenTile);
+                newActions.Add(walkToCoordNomadAction);
+
+                PlantSeedNomadAction plantSeedNomadAction = new PlantSeedNomadAction(this, randomBarrenTile);
+                newActions.Add(plantSeedNomadAction);
             }
         }
 
@@ -364,5 +370,10 @@ public class Nomad : MonoBehaviour, IPointerClickHandler
         _hydrationCurrent = Mathf.Clamp(_hydrationCurrent + hydrationChange, 0f, _hydrationMax);
         _energyCurrent = Mathf.Clamp(_energyCurrent + energyChange, 0f, _energyMax);
         _seedsCurrent += seedsChange;
+    }
+
+    public void RemoveSeed()
+    {
+        _seedsCurrent = Mathf.Clamp(_seedsCurrent - 1f, 0f, int.MaxValue);
     }
 }

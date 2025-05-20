@@ -79,7 +79,7 @@ public class CloudsController : SceneSingleton<CloudsController>
         {
             foreach (Harvestable harvestable in harvestables)
             {
-                harvestable.BoostHealth(_harvestableBonusPerTick);
+                harvestable.ChangeHealth(_harvestableBonusPerTick);
             }
 
             yield return new WaitForSeconds(1f);

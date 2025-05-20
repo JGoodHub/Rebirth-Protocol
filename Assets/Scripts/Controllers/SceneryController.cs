@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -44,9 +45,9 @@ public class SceneryController : SceneSingleton<SceneryController>
 
     public void Initialise()
     {
-        SpawnHarvestable(_plantPrefab, _startingPlantsCount, Vector2Int.one, false, ref _plants);
+        SpawnHarvestables(_plantPrefab, _startingPlantsCount, Vector2Int.one, false, ref _plants);
 
-        SpawnHarvestable(_cactusPrefab, _startingCactiCount, new Vector2Int(1, 2), true, ref _cacti);
+        SpawnHarvestables(_cactusPrefab, _startingCactiCount, new Vector2Int(1, 2), true, ref _cacti);
 
         List<Vector2Int> walkableSpaces = PathfindingController.Singleton.GetWalkableSpaces();
 
@@ -70,7 +71,7 @@ public class SceneryController : SceneSingleton<SceneryController>
         _grassTiles = new HashSet<Vector2Int>();
     }
 
-    public void SpawnHarvestable(GameObject prefab, int count, Vector2Int size, bool isObstacle,
+    public void SpawnHarvestables(GameObject prefab, int count, Vector2Int size, bool isObstacle,
         ref List<Harvestable> container)
     {
         List<Vector2Int> walkableSpaces = PathfindingController.Singleton.GetWalkableSpaces();
@@ -145,6 +146,21 @@ public class SceneryController : SceneSingleton<SceneryController>
         }
 
         return harvestables;
+    }
+
+    public Vector2Int PickRandomBarrenTile()
+    {
+        return _barrenTiles.ToList()[Random.Range(0, _barrenTiles.Count)];
+    }
+
+    public void PlantSeed(Vector2Int coord)
+    {
+        Harvestable newPlant = Instantiate(_plantPrefab, (Vector2)coord, Quaternion.identity, transform)
+            .GetComponent<Harvestable>();
+
+        newPlant.ChangeHealth(-100);
+
+        _plants.Add(newPlant);
     }
 
     private void SpreadVegetation()
