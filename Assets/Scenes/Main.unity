@@ -2101,7 +2101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cloudPrefab: {fileID: 5585045278158876921, guid: 1071cb3be45ed4005bc891e073cc06a8, type: 3}
   _durationInTicks: 12
-  _harvestableBonusPerTick: 5
+  _harvestableBonusPerTick: 8
   _effectRadius: 4
   _cooldown: 22
   _cooldownCover: {fileID: 293620910}
@@ -17472,7 +17472,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1688973736
 Transform:
   m_ObjectHideFlags: 0
